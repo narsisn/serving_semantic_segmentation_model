@@ -1,0 +1,19 @@
+0 - first download the basic checkpoints from this repository : https://github.com/WillBrennan/SemanticSegmentation 
+be careful to get the models using this command git lfs pull to download them fully 
+1- run save_jit_script.py to save the jit script model at jit_models
+2- create handler file : fcn_handler.py
+3- exporting the .mar file  : torch-model-archiver --model-name skin_model --version 1.0 --serialized-file jit_models/skin_model.pt  --export-path model_store --handler handler/fcn_handler.py 
+
+
+
+
+
+required files :
+
+1- fcn checkpoints: model_segmentaion_skin_30.pth 
+2- pretrained fcn model form torch hub 
+
+
+torchserve --start --ncs --model-store model_store/ --models skin_model.mar --ts-config config/config.properties
+torch-model-archiver --model-name skin_model --version 1.0 --serialized-file jit_models/skin_model.pt  --export-path model_store --handler handler/fcn_handler.py 
+curl http://127.0.0.1:8080/predictions/skin_model -T Documents/codes/skin_detection/sample_image/2.jpg
